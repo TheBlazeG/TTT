@@ -2,6 +2,7 @@
 //
 
 #include <iostream>
+#include <vector>
 using namespace std;
 
 
@@ -12,6 +13,9 @@ int main()
 	const int COLUMNS = 3;
 	bool win = false;
 	int space;
+	bool repeat = false;
+	vector<int> Used;
+	vector<int>::const_iterator iter;
 
 	char board[ROWS][COLUMNS] =
 	{ {' ',' ',' '},
@@ -57,11 +61,18 @@ int main()
 			{
 				cout << "Escoge tu espacio Jugador " << i << endl;
 				cin >> space;
-				while (isdigit(space))
+				while (isdigit(space) || repeat==true)
 				{
+					
 					system("cls");
 					cout << "Escoge tu espacio Jugador " << i << endl;
 					cin >> space;
+					Used.push_back(space);
+					iter = find(Used.begin(), Used.end(), space);
+					if (iter != Used.end())
+					{
+						repeat = true;
+					}
 				}
 			}
 			
