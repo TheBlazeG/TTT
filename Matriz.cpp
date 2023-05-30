@@ -6,7 +6,7 @@
 using namespace std;
 const int ROWS = 3;
 const int COLUMNS = 3;
-bool win(char board[ROWS][COLUMNS],int choice);
+bool win(char board[ROWS][COLUMNS],int choice,bool &win);
 
 int main()
 {
@@ -14,16 +14,17 @@ int main()
 	bool tie = false;
 	int space;
 	int choice;
-	char winner;
+
+	bool antirepeatwin=false;
 	bool repeat = false;
 	bool won=false;
 	vector<int> Used;
 	vector<int>::const_iterator iter;
 	
 	char board[ROWS][COLUMNS] =
-	{ {' ',' ',' '},
-	  {' ',' ',' '} ,
-	  {' ',' ',' '} };
+	{ {'1','2','3'},
+	  {'4','5','6'} ,
+	  {'7','8','9'} };
 	cout << "<<<Tic-Tac-Toe>>>\n";
 
 	for (int i = 0; i < ROWS; i++)
@@ -36,7 +37,7 @@ int main()
 	}
 	cout << endl;
 	
-	while (!tie||!won)
+	while (!tie&&!won)
 	{
 		
 		
@@ -47,13 +48,13 @@ int main()
 			{
 				for (int j = 0; j < COLUMNS; j++)
 				{
-					if (board[i][j] == ' ')
+					if (board[i][j] == '1'|| board[i][j] == '2' || board[i][j] == '3' || board[i][j] == '4' || board[i][j] == '5' || board[i][j] == '6' || board[i][j] == '7' || board[i][j] == '8' || board[i][j] == '9')
 					{
 						tie = false;
 					}
 				}
 			}
-			if (!tie||!won)
+			if (!tie&&!won)
 			{
 				
 				do
@@ -178,18 +179,27 @@ int main()
 			case 10:
 				cout << "Empate!!"<<endl;
 					break;
-			case 11:
-				cout <<"Jugador "<< i << " Gana";
-				break;
+			
 			default:
 				break;
 			}
-			won = win(board, choice);
-			if (won)
+			win(board, choice,won);
+			if (won&&!antirepeatwin)
 			{
 				cout << "Jugador " << i << " Gana"<<endl;
+				antirepeatwin = true;
+				for (int i = 0; i < ROWS; i++)
+				{
+					for (int j = 0; j < COLUMNS; j++)
+					{
+						cout << board[i][j];
+					}
+					cout << endl;
+				}
 			}
-			for (int i = 0; i < ROWS; i++)
+			if (!antirepeatwin)
+			{
+for (int i = 0; i < ROWS; i++)
 			{
 				for (int j = 0; j < COLUMNS; j++)
 				{
@@ -197,38 +207,40 @@ int main()
 				}
 				cout << endl;
 			}
+			}
+			
 		}
 	}
 
 }
-bool win(char board[ROWS][COLUMNS], int choice)
+bool win(char board[ROWS][COLUMNS], int choice, bool &win)
 {
-	int x = choice - 1 / 3;
-	int y = choice - 1 % 3;
-	if (board[x][0] == board[x][1] && board[x][1] == board[x][2] && board[x][0]!=' ')
+	int x = (choice - 1) / 3;
+	int y = (choice - 1) % 3;
+	if (board[x][0] == board[x][1] && board[x][1] == board[x][2] )
 	{
-		return true;
+		win= true;
 	}
-	if (board[0][y]==board[1][y] && board[1][y]==board[2][y] && board[0][y] != ' ')
+	if (board[0][y]==board[1][y] && board[1][y]==board[2][y] )
 	{
-		return true;
+		win= true;
 	}
-	if (choice==1||choice==5||choice==9)
+	if (x==y)
 	{
-		if (board[0][0] == board[1][1] && board[1][1] == board[2][2] && board[0][0] != ' ')
+		if (board[0][0] == board[1][1] && board[1][1] == board[2][2] )
 		{
-			return true;
+			win= true;
 		}		
 	}
-	if (choice == 3 || choice == 5 || choice == 7)
+	if (x+y==2)
 	{
-		if (board[2][0] == board[1][1] && board[1][1] == board[0][2] && board[2][0] != ' ')
+		if (board[2][0] == board[1][1] && board[1][1] == board[0][2]  )
 		{
-			return true;
+			win= true;
 		}
 		
 	}
-	
+	return true;
 		
 	
 }
