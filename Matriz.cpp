@@ -4,19 +4,22 @@
 #include <iostream>
 #include <vector>
 using namespace std;
-
-
+const int ROWS = 3;
+const int COLUMNS = 3;
+bool win(char board[ROWS][COLUMNS],int choice);
 
 int main()
 {
-	const int ROWS = 3;
-	const int COLUMNS = 3;
-	bool win = false;
+	
+	bool tie = false;
 	int space;
+	int choice;
+	char winner;
 	bool repeat = false;
+	bool won=false;
 	vector<int> Used;
 	vector<int>::const_iterator iter;
-
+	
 	char board[ROWS][COLUMNS] =
 	{ {' ',' ',' '},
 	  {' ',' ',' '} ,
@@ -33,67 +36,52 @@ int main()
 	}
 	cout << endl;
 	
-	while (!win)
+	while (!tie||!won)
 	{
-		system("cls");
-		for (int i = 0; i < ROWS; i++)
-		{
-			for (int j = 0; j < COLUMNS; j++)
-			{
-				cout << board[i][j];
-			}
-			cout << endl;
-		}
+		
+		
 		for (int i = 1; i < 3; i++)
 		{
-			win = true;
+			tie = true;
 			for (int i = 0; i < ROWS; i++)
 			{
 				for (int j = 0; j < COLUMNS; j++)
 				{
 					if (board[i][j] == ' ')
 					{
-						win = false;
+						tie = false;
 					}
 				}
 			}
-			if (!win)
+			if (!tie||!won)
 			{
-				cout << "Escoge tu espacio Jugador " << i << endl;
-				cin >> space;
-				while (isdigit(space) || repeat==true)
+				
+				do
 				{
+					repeat = false;
 					
-					system("cls");
 					cout << "Escoge tu espacio Jugador " << i << endl;
 					cin >> space;
-					Used.push_back(space);
+					choice = space;
 					iter = find(Used.begin(), Used.end(), space);
 					if (iter != Used.end())
 					{
 						repeat = true;
 					}
-				}
+					system("cls");
+				} while (isdigit(space) || repeat == true);
+				Used.push_back(space);
+			
+					
+				
 			}
 			
 			
-			if (win==true)
+			if (tie==true)
 			{
 				space = 10;
 			}
-			/*
-			space =11;
-			for (int i = 0; i < ROWS; i++)
-			{
-				for (int j = 0; j < COLUMNS; j++)
-				{
-					if (board[j][j] != board[j-1][j-1] || board[i][j] == 'x' || board[i][j]== '0' || board[j][j] == 'x' || board[j][j]=='0')
-					{
-						space = 11;
-						break;
-					}
-				}
-			}*/
+			
 			
 			switch (space)
 			{
@@ -190,8 +178,16 @@ int main()
 			case 10:
 				cout << "Empate!!"<<endl;
 					break;
+			case 11:
+				cout <<"Jugador "<< i << " Gana";
+				break;
 			default:
 				break;
+			}
+			won = win(board, choice);
+			if (won)
+			{
+				cout << "Jugador " << i << " Gana"<<endl;
 			}
 			for (int i = 0; i < ROWS; i++)
 			{
@@ -204,6 +200,37 @@ int main()
 		}
 	}
 
+}
+bool win(char board[ROWS][COLUMNS], int choice)
+{
+	int x = choice - 1 / 3;
+	int y = choice - 1 % 3;
+	if (board[x][0] == board[x][1] && board[x][1] == board[x][2] && board[x][0]!=' ')
+	{
+		return true;
+	}
+	if (board[0][y]==board[1][y] && board[1][y]==board[2][y] && board[0][y] != ' ')
+	{
+		return true;
+	}
+	if (choice==1||choice==5||choice==9)
+	{
+		if (board[0][0] == board[1][1] && board[1][1] == board[2][2] && board[0][0] != ' ')
+		{
+			return true;
+		}		
+	}
+	if (choice == 3 || choice == 5 || choice == 7)
+	{
+		if (board[2][0] == board[1][1] && board[1][1] == board[0][2] && board[2][0] != ' ')
+		{
+			return true;
+		}
+		
+	}
+	
+		
+	
 }
 
 // Ejecutar programa: Ctrl + F5 o menú Depurar > Iniciar sin depurar
