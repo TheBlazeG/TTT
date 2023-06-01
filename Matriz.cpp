@@ -11,6 +11,7 @@ int main()
 	const int ROWS = 3;
 	const int COLUMNS = 3;
 	bool win = false;
+	bool tie = false;
 	int space;
 
 	char board[ROWS][COLUMNS] =
@@ -74,9 +75,9 @@ int main()
 			space =11;
 			for (int i = 0; i < ROWS; i++)
 			{
-				for (int j = 0; j < COLUMNS; j++)
+				for (int j = 0; j < COLUMNS-1; j++)
 				{
-					if (board[j][j] != board[j-1][j-1] || board[i][j] == 'x' || board[i][j]== '0' || board[j][j] == 'x' || board[j][j]=='0')
+					if (board[j][j] != board[j+1][j+1] || board[i][j] == 'x' || board[i][j]== '0' || board[j][j] == 'x' || board[j][j]=='0')
 					{
 						space = 11;
 						break;
