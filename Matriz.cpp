@@ -2,22 +2,29 @@
 //
 
 #include <iostream>
+#include <vector>
 using namespace std;
-
-
+const int ROWS = 3;
+const int COLUMNS = 3;
+bool win(char board[ROWS][COLUMNS],int choice,bool &win);
 
 int main()
 {
-	const int ROWS = 3;
-	const int COLUMNS = 3;
-	bool win = false;
+	
 	bool tie = false;
 	int space;
+	int choice;
 
+	bool antirepeatwin=false;
+	bool repeat = false;
+	bool won=false;
+	vector<int> Used;
+	vector<int>::const_iterator iter;
+	
 	char board[ROWS][COLUMNS] =
-	{ {' ',' ',' '},
-	  {' ',' ',' '} ,
-	  {' ',' ',' '} };
+	{ {'1','2','3'},
+	  {'4','5','6'} ,
+	  {'7','8','9'} };
 	cout << "<<<Tic-Tac-Toe>>>\n";
 
 	for (int i = 0; i < ROWS; i++)
@@ -30,60 +37,52 @@ int main()
 	}
 	cout << endl;
 	
-	while (!win)
+	while (!tie&&!won)
 	{
-		system("cls");
-		for (int i = 0; i < ROWS; i++)
-		{
-			for (int j = 0; j < COLUMNS; j++)
-			{
-				cout << board[i][j];
-			}
-			cout << endl;
-		}
+		
+		
 		for (int i = 1; i < 3; i++)
 		{
-			win = true;
+			tie = true;
 			for (int i = 0; i < ROWS; i++)
 			{
 				for (int j = 0; j < COLUMNS; j++)
 				{
-					if (board[i][j] == ' ')
+					if (board[i][j] == '1'|| board[i][j] == '2' || board[i][j] == '3' || board[i][j] == '4' || board[i][j] == '5' || board[i][j] == '6' || board[i][j] == '7' || board[i][j] == '8' || board[i][j] == '9')
 					{
-						win = false;
+						tie = false;
 					}
 				}
 			}
-			if (!win)
+			if (!tie&&!won)
 			{
-				cout << "Escoge tu espacio Jugador " << i << endl;
-				cin >> space;
-				while (isdigit(space))
+				
+				do
 				{
-					system("cls");
+					repeat = false;
+					
 					cout << "Escoge tu espacio Jugador " << i << endl;
 					cin >> space;
-				}
+					choice = space;
+					iter = find(Used.begin(), Used.end(), space);
+					if (iter != Used.end())
+					{
+						repeat = true;
+					}
+					system("cls");
+				} while (isdigit(space) || repeat == true);
+				Used.push_back(space);
+			
+					
+				
 			}
 			
 			
-			if (win==true)
+			if (tie==true)
 			{
 				space = 10;
 			}
-			/*
-			space =11;
-			for (int i = 0; i < ROWS; i++)
-			{
-				for (int j = 0; j < COLUMNS-1; j++)
-				{
-					if (board[j][j] != board[j+1][j+1] || board[i][j] == 'x' || board[i][j]== '0' || board[j][j] == 'x' || board[j][j]=='0')
-					{
-						space = 11;
-						break;
-					}
-				}
-			}*/
+			
 			
 			switch (space)
 			{
@@ -180,10 +179,27 @@ int main()
 			case 10:
 				cout << "Empate!!"<<endl;
 					break;
+			
 			default:
 				break;
 			}
-			for (int i = 0; i < ROWS; i++)
+			win(board, choice,won);
+			if (won&&!antirepeatwin)
+			{
+				cout << "Jugador " << i << " Gana"<<endl;
+				antirepeatwin = true;
+				for (int i = 0; i < ROWS; i++)
+				{
+					for (int j = 0; j < COLUMNS; j++)
+					{
+						cout << board[i][j];
+					}
+					cout << endl;
+				}
+			}
+			if (!antirepeatwin)
+			{
+for (int i = 0; i < ROWS; i++)
 			{
 				for (int j = 0; j < COLUMNS; j++)
 				{
@@ -191,9 +207,42 @@ int main()
 				}
 				cout << endl;
 			}
+			}
+			
 		}
 	}
 
+}
+bool win(char board[ROWS][COLUMNS], int choice, bool &win)
+{
+	int x = (choice - 1) / 3;
+	int y = (choice - 1) % 3;
+	if (board[x][0] == board[x][1] && board[x][1] == board[x][2] )
+	{
+		win= true;
+	}
+	if (board[0][y]==board[1][y] && board[1][y]==board[2][y] )
+	{
+		win= true;
+	}
+	if (x==y)
+	{
+		if (board[0][0] == board[1][1] && board[1][1] == board[2][2] )
+		{
+			win= true;
+		}		
+	}
+	if (x+y==2)
+	{
+		if (board[2][0] == board[1][1] && board[1][1] == board[0][2]  )
+		{
+			win= true;
+		}
+		
+	}
+	return true;
+		
+	
 }
 
 // Ejecutar programa: Ctrl + F5 o menú Depurar > Iniciar sin depurar
